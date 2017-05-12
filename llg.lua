@@ -24,20 +24,6 @@ local function makeGraph(wordlist)
     return graph
 end
 
-local function printGraph(graph, wordlist)
-    for i, links in ipairs(graph) do
-        io.write(wordlist[i] .. "->")
-        for j, linked in ipairs(links) do
-            io.write(wordlist[linked] .. ",")
-        end
-        io.write("\n")
-    end
-end
-
-local function printStack(st)
-    print(table.concat(st, ","))
-end
-
 local function longestPath(graph)
     local visited = {}
     local toppath = {}
@@ -75,11 +61,9 @@ local function main()
     for k, _ in pairs(words) do
         table.insert(wordlist, k)
     end
-    table.sort(wordlist)
 
     local graph = makeGraph(wordlist)
 
-    -- printGraph(graph, wordlist)
     for _, idx in ipairs(longestPath(graph)) do
         print(wordlist[idx])
     end
