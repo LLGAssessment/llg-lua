@@ -41,24 +41,25 @@ end
 local function longestPath(graph)
     local visited = {}
     local toppath = {}
+    local toppathlen = 0
     local stack = {}
-    local function recurseGraph(pos)
+    local function recurseGraph(pos, depth)
         visited[pos] = true
-        table.insert(stack, pos)
-        if #toppath < #stack then
-            toppath = {unpack(stack)}
+        stack[depth] = pos
+        if toppathlen < depth then
+            toppathlen = depth
+            for i = 1,depth do toppath[i] = stack[i] end
         end
         for _, link in ipairs(graph[pos]) do
             if not visited[link] then
-                recurseGraph(link)
+                recurseGraph(link, depth + 1)
             end
         end
         visited[pos] = false
-        table.remove(stack)
     end
 
     for i, _ in ipairs(graph) do
-        recurseGraph(i)
+        recurseGraph(i, 1)
     end
     return toppath
 end
