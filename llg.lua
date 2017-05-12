@@ -34,6 +34,35 @@ local function printGraph(graph, wordlist)
     end
 end
 
+local function printStack(st)
+    print(table.concat(st, ","))
+end
+
+local function longestPath(graph)
+    local visited = {}
+    local toppath = {}
+    local stack = {}
+    local function recurseGraph(pos)
+        visited[pos] = true
+        table.insert(stack, pos)
+        if #toppath < #stack then
+            toppath = {unpack(stack)}
+        end
+        for _, link in ipairs(graph[pos]) do
+            if not visited[link] then
+                recurseGraph(link)
+            end
+        end
+        visited[pos] = false
+        table.remove(stack)
+    end
+
+    for i, _ in ipairs(graph) do
+        recurseGraph(i)
+    end
+    return toppath
+end
+
 local function main()
     local words = {}
     for line in io.lines() do
@@ -49,7 +78,10 @@ local function main()
 
     local graph = makeGraph(wordlist)
 
-    printGraph(graph, wordlist)
+    -- printGraph(graph, wordlist)
+    for _, idx in ipairs(longestPath(graph)) do
+        print(wordlist[idx])
+    end
 
 end
 
